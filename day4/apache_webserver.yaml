@@ -1,0 +1,14 @@
+---
+- name: install apache 
+  hosts: webservers
+  become: True
+  tasks:
+    - name: download and install apache
+      dnf:
+        name: httpd
+        state: present
+    - name: start and enable apache
+      service:
+        name: httpd
+        state: started
+        enabled: yes

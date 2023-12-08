@@ -1,0 +1,58 @@
+---
+- name: install apache 
+  hosts: webservers
+  become: True
+  tasks:
+    - name: download and install apache
+      dnf:
+        name: httpd
+        state: present
+    - name: start and enable apache
+      service:
+        name: httpd
+        state: started 
+        enabled: yes
+    - name: copy index.html file to servers
+      copy:  
+        src: index.html
+        dest: /var/www/html/index.html
+        owner: apache
+        group: apache
+        mode: '0644'
+- name: Install MySQL
+  hosts: databases
+  become: True
+  tasks:
+    - name: install mysql
+      dnf:  
+        name: mariadb-server
+        state: present
+    - name: download and install apache
+      dnf:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - wget
+        - zip
+        - unzip
+        - git
+    - name: Create group developers
+      group:
+        name: developers
+        state: present
+    - name: create users from the list
+      user:
+        name: "{{ item }}"
+        comment: adding users from list
+        groups: developers
+      loop:
+        - user1
+        - user2
+        - user3
+      register: users
+
+    - name: output of user module
+      debug:
+        var: users.results[0].invocation.module_args.name
+
+      

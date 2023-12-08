@@ -1,0 +1,67 @@
+---
+- name: Install PyMySQL
+  hosts: databases
+  become: True
+  tasks:
+    - name: Install Mariadb on RedHat
+      dnf:  
+        name: mariadb-server
+        state: present
+      when: ansible_distribution == "RedHat"
+    
+    - name: Install Mariadb on Ubuntu
+      apt:  
+        update_cache: yes
+        name: mariadb-server
+        state: present
+      when: ansible_distribution == "Ubuntu"
+
+    - name: start and enable MariaDB
+      service:
+        name: mariadb
+        state: started 
+        enabled: yes
+    - name: Install PyMySQL on RedHat
+      dnf:
+       name: python3-PyMySQL
+       state: present
+      when: ansible_distribution == "RedHat"
+    
+    - name: Install PyMySQL on Ubuntu
+      apt:
+       name: python3-pymysql
+       state: present
+      when: ansible_distribution == "Ubuntu"
+    
+    - name: create Database on mariadb on RedHat
+      mysql_db:
+        name: testDB
+        state: present
+        login_unix_socket: /var/lib/mysql/mysql.sock
+      when: ansible_distribution == "RedHat"
+    
+    - name: create Database on mariadb on ubuntu
+      mysql_db:
+        name: testDB
+        state: present
+        login_unix_socket: /run/mysqld/mysqld.sock
+      when: ansible_distribution == "Ubuntu"
+
+    - name: Create database user using '123123' password with all database privileges on redhat
+      community.mysql.mysql_user:
+        name: database
+        password: 123123
+        priv: '*.*:ALL'
+        state: present
+        login_unix_socket: /var/lib/mysql/mysql.sock
+      when: ansible_distribution == "RedHat"
+    - name: Create database user using '123123' password with all database privileges on ubuntu
+      community.mysql.mysql_user:
+        name: database
+        password: 123123
+        priv: '*.*:ALL'
+        state: present
+        login_unix_socket: /run/mysqld/mysqld.sock
+      when: ansible_distribution == "Ubuntu"
+        
+   

@@ -1,0 +1,22 @@
+---
+- name: adding users
+  hosts: databases
+  become: yes
+  vars:
+   # user: local
+   # comment: adding user forgroup engineers
+  tasks:
+    - name: create user
+      user:
+        name: "{{name}}"
+        state: present
+        comment: "{{comm}}"
+      register: userout
+    - name: print output of user name
+      debug:
+        var: userout.name
+    - name: print output of user name
+      debug:
+        var: userout.comment
+
+

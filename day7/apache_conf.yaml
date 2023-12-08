@@ -1,0 +1,30 @@
+---
+- name: install apache 
+  hosts: webservers
+  become: True
+  tasks:
+    - name: download and install apache
+      dnf:
+        name: httpd
+        state: present
+    - name: start and enable apache
+      service:
+        name: httpd
+        state: started 
+        enabled: yes
+    - name: copy index.html file to servers
+      copy:  
+        src: index.html
+        dest: /var/www/html/index.html
+        owner: apache
+        group: apache
+        mode: '0644'
+- name: Install MySQL
+  hosts: db-centos
+  become: True
+  tasks:
+    - name: install mysql
+      dnf:  
+        name: mariadb-server
+        state: present
+      

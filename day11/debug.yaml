@@ -1,0 +1,11 @@
+---
+- name: debug info distribution
+  hosts: all
+  tasks: 
+  - name: getting OS
+    debug:
+      var: ansible_distribution
+  - name: ansible_env
+    debug:
+      var: ansible_env.USER
+

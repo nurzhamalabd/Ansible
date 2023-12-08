@@ -1,0 +1,7 @@
+users:
+  - name: maks
+    state: present
+  - name: sona
+    state: present
+  - name: nur
+    state: present

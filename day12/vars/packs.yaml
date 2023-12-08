@@ -1,0 +1,9 @@
+packs: 
+  - name: wget
+    state: present
+  - name: zip
+    state: present
+  - name: git
+    state: present
+  - name: mariadb-server
+    state: present 

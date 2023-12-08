@@ -1,0 +1,10 @@
+---
+- name: debug info distribution
+  hosts: databases
+  tasks: 
+    - name: mounts info
+      debug:  
+        var: ansible_mounts[0].block_available
+    - name: selinux status
+      debug:  
+        var: ansible_selinux.status
